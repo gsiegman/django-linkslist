@@ -7,7 +7,7 @@ class LinksListItemInline(admin.StackedInline):
     form = LinksListItemAdminForm
     fieldsets = (
         (None, {
-            'fields': ('link', 'description', 'order', 'photo',)
+            'fields': ('link', 'description', 'order', 'image',)
         }),
     )
     extra = 5
