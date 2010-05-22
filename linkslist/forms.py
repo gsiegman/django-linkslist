@@ -1,11 +1,10 @@
 from django import forms
 from django.conf import settings
-from linkslist.models import LinksListItem
-from photologue.models import Photo
+from linkslist.models import LinksListItem, LinksListItemImage
 from ajax_filtered_fields.forms import ForeignKeyByLetter
 
 class LinksListItemAdminForm(forms.ModelForm):
-    photo = ForeignKeyByLetter(Photo, field_name="title", required=False)
+    image = ForeignKeyByLetter(LinksListItemImage, field_name="name", required=False)
     
     class Meta:
         model = LinksListItem
