@@ -1,26 +1,37 @@
 from django.db import models
-from django.contrib.sites.models import Site
-from django.contrib.sites.managers import CurrentSiteManager
-from photologue.models import Photo
+from imagekit.models import ImageModel
 
 class LinksList(models.Model):
-    key = models.CharField(max_length=20)
+    key = models.CharField(max_length=20, unique=True)
     title = models.CharField(max_length=75)
-    site = models.ForeignKey(Site)
     
     objects = models.Manager()
-    on_site = CurrentSiteManager('site',) 
     
     class Meta:
-        unique_together = (('title', 'site',), ('key', 'site',),)
         ordering = ('title',)
     
     def __unicode__(self):
-        return '%s links list on %s' % (self.title, self.site.name)
+        return '%s links list' % self.title
+
+class LinksListItemImage(ImageModel):
+    name = models.CharField(max_length=100)
+    original_image = models.ImageField(upload_to='photos')
+    caption = models.TextField()
+    num_views = models.PositiveIntegerField(editable=False,
+        default=0
+    )
+    
+    class IKOptions:
+        spec_module = 'linkslist.specs'
+        image_field = 'original_image'
+        save_count_as = 'num_views'
         
+    def __unicode__(self):
+        return self.name
+
 class LinksListItem(models.Model):
     links_list = models.ForeignKey(LinksList)
-    photo = models.ForeignKey(Photo, blank=True, null=True)
+    image = models.ForeignKey(LinksListItemImage, blank=True, null=True)
     link = models.URLField(verify_exists=False)
     description = models.CharField(max_length=160, blank=True)
     order = models.PositiveSmallIntegerField()

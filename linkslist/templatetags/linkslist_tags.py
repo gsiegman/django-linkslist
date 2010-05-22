@@ -7,7 +7,7 @@ register = template.Library()
 @register.inclusion_tag('linkslist/slider.html')
 def slider(key):
     try:
-        slider = LinksList.on_site.get(key=key)
+        slider = LinksList.objects.get(key=key)
     except:
         slider = ''
     
@@ -17,14 +17,14 @@ def slider(key):
 def slider_js():
     js = """
     <script type='text/javascript' src='%sjs/easyslider1.7/easySlider1.7.js'></script>
-	<script type='text/javascript'>
-		$(document).ready(function(){	
-			$('#slider').easySlider({
-				auto: true, 
-				continuous: true
-			});
-		});	
-	</script>
+    <script type='text/javascript'>
+        $(document).ready(function(){	
+            $('#slider').easySlider({
+                auto: true, 
+                continuous: true
+            });
+        });	
+    </script>
     """ % (settings.STATIC_URL,)
     
     return js
@@ -32,7 +32,7 @@ def slider_js():
 @register.inclusion_tag('linkslist/simplelist.html')
 def simplelist(key):
     try:
-        simplelist = LinksList.on_site.get(key=key)
+        simplelist = LinksList.objects.get(key=key)
     except:
         simplelist = ''
         
